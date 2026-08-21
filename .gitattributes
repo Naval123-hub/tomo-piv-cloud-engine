@@ -1,0 +1,32 @@
+# Normalise line endings. Development happens on Windows; the Modal GPU worker
+# and any CI run on Linux, so text files are stored LF in the repo and checked
+# out natively. Without this, shell scripts committed with CRLF fail in the
+# container with a confusing "bad interpreter" error.
+* text=auto eol=lf
+
+*.py    text eol=lf
+*.js    text eol=lf
+*.jsx   text eol=lf
+*.json  text eol=lf
+*.css   text eol=lf
+*.html  text eol=lf
+*.md    text eol=lf
+*.yml   text eol=lf
+*.sh    text eol=lf
+
+# Windows-only helpers keep CRLF.
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+
+# Binary: never touch, never diff.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.ico   binary
+*.ims   binary
+*.npy   binary
+*.tif   binary
+*.tiff  binary
+
+# Generated -- collapse in pull requests.
+package-lock.json linguist-generated=true

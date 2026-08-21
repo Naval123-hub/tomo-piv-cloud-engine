@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+/* The console is a dark-first instrument panel: long-running jobs get watched
+   for minutes at a time, and the charts and MIP previews it sits alongside are
+   themselves dark. Pinned rather than following the OS so screenshots pasted
+   into lab notes look the same for everyone. */
+html {
+  color-scheme: dark;
+  background-color: #0a0a0a;
+}

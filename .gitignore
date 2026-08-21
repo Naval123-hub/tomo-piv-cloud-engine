@@ -1,0 +1,68 @@
+# ---------------------------------------------------------------------------
+# Secrets  --  never commit these. Each app ships a .env.example instead.
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ---------------------------------------------------------------------------
+# Node
+# ---------------------------------------------------------------------------
+node_modules/
+dist/
+build/
+.vite/
+npm-debug.log*
+yarn-error.log*
+.eslintcache
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# ---------------------------------------------------------------------------
+# Acquisition data and pipeline output
+#
+# These live outside the repository by design (see README - the pipeline walks
+# up to find them), but the patterns are here so a stray copy inside the tree
+# can never be committed by accident. A single raw run is several GB.
+# ---------------------------------------------------------------------------
+Project_Imaging_*/
+LED_PIV/
+output/
+*.ims
+*.npy
+*.tif
+*.tiff
+*.vtk
+*.vtu
+*.pvd
+
+# ---------------------------------------------------------------------------
+# Editors / OS
+# ---------------------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ---------------------------------------------------------------------------
+# Misc
+# ---------------------------------------------------------------------------
+*.log
+.claude/
+scratch/
+tmp/

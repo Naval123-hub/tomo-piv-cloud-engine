@@ -1,0 +1,67 @@
+all commmand should be inside Nval directory in vs code
+
+1-> Full pipeline (all 5 steps, default run LI_16072026_7.2mm_09):
+
+python.exe -m pipeline.run_pipeline --run LI_16072026_7.2mm_09
+
+
+
+2-> (raw→jpg, enhance, detect — skip the slow 3D reconstruction):
+
+python.exe -m pipeline.run_pipeline --run LI_16072026_7.2mm_09 --skip-reconstruction
+
+3->  just mart after 2 
+
+python.exe -m pipeline.reconstruct_mart --run LI_16072026_7.2mm_09 --iterations 15
+
+4-> cross corelatio
+python.exe -m pipeline.cross_correlate --run LI_16072026_7.2mm_14 --window 32 --overlap 0.5 --dt-us 50
+
+
+from paraview.simple import *
+
+folder = r"C:\Users\barod\Desktop\Core intern\3d piv\Naval\output\LI_16072026_7.2mm_08\volumes"
+files = [f"{folder}\\volume_b{i:03d}.tif" for i in range(6)]
+
+src = ProgrammableSource()
+src.OutputDataSetType = 'vtkImageData'
+
+src.Script = f"""
+from vtkmodules.vtkIOImage import vtkTIFFReader
+files = {files!r}
+executive = self.GetExecutive()
+outInfo = executive.GetOutputInformation(0)
+t = outInfo.Get(executive.UPDATE_TIME_STEP()) if outInfo.Has(executive.UPDATE_TIME_STEP()) else 0.0
+idx = int(round(t))
+if idx < 0:
+    idx = 0
+if idx > len(files) - 1:
+    idx = len(files) - 1
+reader = vtkTIFFReader()
+reader.SetFileName(files[idx])
+reader.Update()
+self.GetOutput().ShallowCopy(reader.GetOutput())
+"""
+
+src.ScriptRequestInformation = f"""
+from vtkmodules.vtkCommonExecutionModel import vtkStreamingDemandDrivenPipeline as sddp
+
+executive = self.GetExecutive()
+outInfo = executive.GetOutputInformation(0)
+
+n = {len(files)}
+outInfo.Remove(sddp.TIME_STEPS())
+for i in range(n):
+    outInfo.Append(sddp.TIME_STEPS(), float(i))
+
+outInfo.Remove(sddp.TIME_RANGE())
+outInfo.Append(sddp.TIME_RANGE(), 0.0)
+outInfo.Append(sddp.TIME_RANGE(), float(n - 1))
+"""
+
+src.UpdatePipelineInformation()
+src.UpdatePipeline()
+print("timesteps:", src.TimestepValues)
+print("points at t=0:", src.GetDataInformation().GetNumberOfPoints())
+Show(src)
+Render()

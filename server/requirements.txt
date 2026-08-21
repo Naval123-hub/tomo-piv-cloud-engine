@@ -1,0 +1,27 @@
+# Python dependencies for the Tomo-PIV backend.
+#
+# The Modal worker does NOT read this file: its container image declares its own
+# pinned set inline in app_modal.py (including cupy-cuda12x, which only installs
+# on a CUDA host). Keep the two in step when you change a version.
+#
+# Install with:  pip install -r requirements.txt
+
+# --- numerical pipeline (Steps 1-6) ---------------------------------------
+numpy>=1.26,<3
+opencv-python>=4.9          # containers use opencv-python-headless instead
+scikit-image>=0.22
+pillow>=10.0
+tifffile>=2024.1.30
+
+# --- cloud plane (R2 object storage + job status) --------------------------
+boto3>=1.34                 # Cloudflare R2 over the S3 API
+redis>=5.0                  # Upstash / any Redis for job records
+
+# --- GPU worker + API ------------------------------------------------------
+modal>=0.73                 # deploys and drives the T4 containers
+fastapi>=0.110              # imported locally by `modal deploy`
+pydantic>=2.6
+
+# --- optional: GPU acceleration for Steps 4-6 on a local CUDA 12 machine ----
+# Without it, pipeline/gpu_utils.py falls back to NumPy automatically.
+# cupy-cuda12x>=13.0

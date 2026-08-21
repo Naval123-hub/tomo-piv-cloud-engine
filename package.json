@@ -1,0 +1,19 @@
+{
+  "name": "tomo-piv",
+  "version": "1.0.0",
+  "private": true,
+  "description": "3D Tomographic PIV - React console, Express API gateway and Modal GPU worker",
+  "scripts": {
+    "setup": "npm run install:node && python -m pip install -r server/requirements.txt",
+    "install:node": "npm --prefix server install && npm --prefix client install",
+    "dev": "node scripts/dev.mjs",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "start": "npm --prefix server start",
+    "build": "npm --prefix client run build",
+    "deploy:worker": "cd server && modal deploy app_modal.py"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
